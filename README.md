@@ -56,6 +56,29 @@ chair, столица
 
 ---
 
+## Homework 4 – Jetpack Compose
+
+Implemented basic Jetpack Compose examples:
+
+- Counter App (state management)
+- Layout example (Row & Column)
+
+Updated Dictionary App UI using Compose:
+- Improved layout
+- Material 3 components
+- Better user interface
+
+### Screenshots
+
+#### Counter App
+![Counter App](screenshots/hw4_counter.png)
+![Layout Example](screenshots/hw4_layout.png)
+
+#### Dictionary App
+![Dictionary App 1](screenshots/hw4_dictionary1.png)
+
+---
+
 ## Technologies
 
 * Kotlin

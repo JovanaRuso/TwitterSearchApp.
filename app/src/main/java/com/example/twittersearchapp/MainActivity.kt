@@ -8,11 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.example.twittersearchapp.ui.theme.TwitterSearchAppTheme
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -25,40 +28,33 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TwitterSearchAppTheme {
-                TwitterSearchScreen()
+                DictionaryScreen()
             }
         }
     }
 }
 
 fun loadDictionary(context: Context): Map<String, String> {
-
     val dictionary = mutableMapOf<String, String>()
-
     val inputStream = context.assets.open("dictionary.txt")
     val reader = BufferedReader(InputStreamReader(inputStream))
 
     reader.forEachLine { line ->
-
         val parts = line.split(",")
-
         if (parts.size == 2) {
             val english = parts[0].trim()
             val macedonian = parts[1].trim()
-
             dictionary[english] = macedonian
             dictionary[macedonian] = english
         }
     }
-
     reader.close()
-
     return dictionary
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TwitterSearchScreen() {
+fun DictionaryScreen() {
 
     val context = LocalContext.current
     val dictionary = remember { loadDictionary(context) }
@@ -72,7 +68,12 @@ fun TwitterSearchScreen() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Dictionary Search App") }
+                title = {
+                    Text(
+                        text = "Dictionary App",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
             )
         }
     ) { paddingValues ->
@@ -81,9 +82,11 @@ fun TwitterSearchScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
+            // Поле за внесување збор
             OutlinedTextField(
                 value = searchWord,
                 onValueChange = { searchWord = it },
@@ -91,29 +94,40 @@ fun TwitterSearchScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
+            // Копче за пребарување со модерен стил
             Button(
                 onClick = {
-
                     val word = searchWord.trim()
-
                     result = dictionary[word] ?: "Word not found"
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6200EE),
+                    contentColor = Color.White
+                )
             ) {
                 Text("Search")
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Резултат во Card
+            if (result.isNotEmpty()) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(6.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "Result: $result",
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+            }
 
-            Text(
-                text = result,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
-
+            // Поле за тагови
             OutlinedTextField(
                 value = tagInput,
                 onValueChange = { tagInput = it },
@@ -121,17 +135,21 @@ fun TwitterSearchScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             Button(
                 onClick = {
                     if (tagInput.isNotBlank()) {
                         tags = tags + tagInput
                         tagInput = ""
                     }
-                }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF03DAC5),
+                    contentColor = Color.Black
+                )
             ) {
-                Text("Save")
+                Text("Save Tag")
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -141,10 +159,9 @@ fun TwitterSearchScreen() {
                 style = MaterialTheme.typography.titleMedium
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 items(tags) { tag ->
                     TagItem(tag)
@@ -155,7 +172,12 @@ fun TwitterSearchScreen() {
 
             Button(
                 onClick = { tags = emptyList() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red,
+                    contentColor = Color.White
+                )
             ) {
                 Text("Clear Tags")
             }
@@ -165,17 +187,26 @@ fun TwitterSearchScreen() {
 
 @Composable
 fun TagItem(tag: String) {
-
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Button(onClick = {}) {
+        Button(
+            onClick = {},
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+        ) {
             Text(tag)
         }
 
-        Button(onClick = {}) {
+        Button(
+            onClick = {},
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow, contentColor = Color.Black)
+        ) {
             Text("Edit")
         }
     }
