@@ -71,8 +71,8 @@ Updated Dictionary App UI using Compose:
 ### Screenshots
 
 #### Counter App
-![Counter App](screenshots_compose/hw4_counter.png)
-![Layout Example](screenshots_compose/hw4_layout.png)
+![Counter App](https://github.com/JovanaRuso/ComposeExamples/blob/main/screenshots_compose/hw4_counter.png?raw=true)
+![Layout Example](https://github.com/JovanaRuso/ComposeExamples/blob/main/screenshots_compose/hw4_layout.png?raw=true)
 
 #### Dictionary App
 ![Dictionary App 1](screenshots/hw4_dictionary1.png)
